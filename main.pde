@@ -1,24 +1,26 @@
 /*
+
   abv-2d.pde
- 
+  
  */
 
 
-boolean runningStateToggle = true;
+boolean runningStateToggle = false;
 
 float simulationTime = 0.0; 
 
-int NUM_AGENTS=100;
+int NUM_AGENTS=10;
 
-Agent[] agents = new Agent[NUM_AGENTS];
+Agent[] agents;
 
-Pheromone pheromone = new Pheromone();
+//Pheromone pheromone = new Pheromone();
+
+
 
 void draw() {
   float dt = 0.1; // delta t (time increment).
   
   background( 150, 150, 200 );
-  
 
   if ( runningStateToggle ) {
     for ( int i=0; i<NUM_AGENTS; i++ ) {
@@ -32,38 +34,49 @@ void draw() {
   PVector pos = new PVector(100,100);
   
   for ( int i=0; i<NUM_AGENTS; i++ ) {
-    agents[i].show();
-    // pg = pheromone.getPheromoneGradient( pos );
-    pg = pheromone.getField( pos );
-    println(pg);
-  }
+    agents[i].display();
+    println( " in mian/draw, agents[" + i + "].x = " + agents[i].position.x );    
+    //pg = pheromone.getField( pos );
+    //println(pg);
+  } //<>//
+  
+  //for ( Agent ant : agents ) {
+  //  println( " in mian/draw, agent pos.x = " + ant.position.x );    
+  //  ant.display();
+  //}
+  
 }
 
 
 void setup() {
   size( 1000, 800 );
-  float maxVelocity = 50.0;
-  float minVelocity =  0.0;
+  float maxVelocity = 0.0;
+  float minVelocity = 0.0;
+  PVector pos = new PVector(0,0);
+  PVector vel = new PVector(0,0);
   
-  
+  agents = new Agent[NUM_AGENTS];
+
   for ( int i=0; i<NUM_AGENTS; i++ ) {
     // position
-    float x0 = random( width );
-    float y0 = random( height );
+    pos.x = random( width );
+    pos.y = random( height );
+    println( " i,x,y = " + i + " " + pos.x + " " + pos.y );
     // velocity
-    float vel = random( minVelocity, maxVelocity );
+    float velocity = random( minVelocity, maxVelocity );
     float angle = random( 0, TWO_PI );
-    float vx0 = vel*cos( angle );
-    float vy0 = vel*sin( angle );
+    vel.x = velocity*cos( angle );
+    vel.y = velocity*sin( angle );
     // color
     int r = int( random( 100, 255 ) );
     int g = int( random( 100, 255 ) );
     int b = int( random( 100, 255 ) );
-    agents[i] = new Agent( x0, y0, vx0, vy0, r, g, b ); 
+    agents[i] = new Agent( pos, vel, r, g, b );
+    println(" in setup, agents[" + i + "].position.x = " + agents[i].position.x );
   }  
   
-  PVector pos = new PVector(300,300);
-  pheromone.placeMonopole( pos );
+  //PVector  = new PVector(300,300);
+  //pheromone.placeMonopole( pos );
 }
 
 

@@ -1,49 +1,51 @@
 
 class Agent {
-  float x; // Agent's position x
-  float y; //              and y
-  float vx, vy; // Agent's velocity, x and y components.
+  PVector position;
+  PVector velocity;
+
   color col;    // color.
 
-  Agent( float xInit,  float yInit, 
-         float vxInit, float vyInit, 
-         int red, int green, int blue ) {
-    x = xInit;
-    y = yInit;
-    vx = vxInit;
-    vy = vyInit;
+  Agent( PVector initialPosition,
+         PVector initialVelocity,
+         int red, 
+         int green, 
+         int blue ) {
+    position = initialPosition;
+    velocity = initialVelocity;
+println(" in Agent pos.x = " + position.x + " pos.y = " + position.y );    
     col = color( red, green, blue );
   }
   
-  void show() {
+  
+  void display() {
     stroke( 0 );
     fill( col );
-    ellipse( x, y, 10, 10 );  // place a circle
+println( "in show of Agent, pos.x,y = " + position.x + " " + position.y );  
+    ellipse( position.x, position.y, 10, 10 );  // place a circle
   }
 
   void move(float dt) {
     PVector field;
     
-    //field = pheromone.getField( 
+    //field = pheromone.getField(
     
-    x += vx*dt;  // shift the ball position in x.
-    y += vy*dt;  // ... in y.
-    vx += 
-    if ( x >= width ) {// The ball hits the right wall. 
-      x = width;
-      vx = -vx; // Reverse the direction.
+    //position.add( velocity.mult( dt ) );
+        
+    if ( position.x >= width ) { // The agent hits the right wall. 
+      position.x = width;
+      velocity.x = -velocity.x; // Reverse the direction.
     }
-    if ( x<= 0 ) {  // Hit the left wall.
-      x = 0;
-      vx = -vx;
+    if ( position.x<= 0 ) {  // Hit the left wall.
+      position.x = 0;
+      velocity.x = -velocity.x;
     }
-    if ( y >= height ) {// Hit the floor. 
-      y = height;
-      vy = -vy; // Reverse the direction.
+    if ( position.y >= height ) {// Hit the floor. 
+      position.y = height;
+      velocity.y = -velocity.y; // Reverse the direction.
     }
-    if ( y <= 0 ) {  // Hit the ceiling.
-      y = 0;
-      vy = -vy;
+    if ( position.y <= 0 ) {  // Hit the ceiling.
+      position.y = 0;
+      velocity.y = -velocity.y;
     }
   }
 }
