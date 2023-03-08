@@ -12,12 +12,13 @@ int NUM_AGENTS=8;
 
 Agent[] agents = new Agent[NUM_AGENTS];
 
-
+Pheromone pheromone;
 
 void draw() {
   float dt = 0.1; // delta t (time increment).
   
-  background( 150, 150, 200 );  
+  background( 150, 150, 200 );
+  
 
   if ( runningStateToggle ) {
     for ( int i=0; i<NUM_AGENTS; i++ ) {
@@ -27,8 +28,12 @@ void draw() {
     println( " t = " + simulationTime );
   }   
  
+  PVector pg;
+  PVector pos = new PVector(100,100);
+  
   for ( int i=0; i<NUM_AGENTS; i++ ) {
     agents[i].show();
+    println( pheromone.getPheromoneGradient( pos ) );
   }
 }
 
