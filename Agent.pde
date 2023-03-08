@@ -22,8 +22,13 @@ class Agent {
   }
 
   void move(float dt) {
+    PVector field;
+    
+    //field = pheromone.getField( 
+    
     x += vx*dt;  // shift the ball position in x.
     y += vy*dt;  // ... in y.
+    vx += 
     if ( x >= width ) {// The ball hits the right wall. 
       x = width;
       vx = -vx; // Reverse the direction.
