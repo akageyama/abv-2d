@@ -23,13 +23,14 @@ class Agent {
 
   void move(float dt) {
     float pgv_x, pgv_y, dvel_x, dvel_y;
-    final float FACTOR = 0.0001;
+    final float FACTOR_INERTIA = -1; // camera is negatively charged.
+    final float FACTOR_FRICTION = 1.e-3;
     
     pgv_x = pheromone.getGradientVectorX( pos_x, pos_y );
     pgv_y = pheromone.getGradientVectorY( pos_x, pos_y );
 
-    dvel_x = FACTOR * pgv_x;
-    dvel_y = FACTOR * pgv_y;
+    dvel_x = FACTOR_INERTIA * pgv_x - FACTOR_FRICTION * vel_x;
+    dvel_y = FACTOR_INERTIA * pgv_y - FACTOR_FRICTION * vel_y;
     
     pos_x += vel_x*dt;  // shift the ball position in x.
     pos_y += vel_y*dt;  // ... in y.
@@ -37,21 +38,21 @@ class Agent {
     vel_x += dvel_x;
     vel_y += dvel_y;
     
-    if ( pos_x >= width ) {// The ball hits the right wall. 
-      pos_x = width;
-      vel_x = -vel_x; // Reverse the direction.
-    }
-    if ( pos_x<= 0 ) {  // Hit the left wall.
-      pos_x = 0;
-      vel_x = -vel_x;
-    }
-    if ( pos_y >= height ) {// Hit the floor. 
-      pos_y = height;
-      vel_y = -vel_y; // Reverse the direction.
-    }
-    if ( pos_y <= 0 ) {  // Hit the ceiling.
-      pos_y = 0;
-      vel_y = -vel_y;
-    }
+    //if ( pos_x >= width ) {// The ball hits the right wall. 
+    //  pos_x = width;
+    //  vel_x = -vel_x; // Reverse the direction.
+    //}
+    //if ( pos_x<= 0 ) {  // Hit the left wall.
+    //  pos_x = 0;
+    //  vel_x = -vel_x;
+    //}
+    //if ( pos_y >= height ) {// Hit the floor. 
+    //  pos_y = height;
+    //  vel_y = -vel_y; // Reverse the direction.
+    //}
+    //if ( pos_y <= 0 ) {  // Hit the ceiling.
+    //  pos_y = 0;
+    //  vel_y = -vel_y;
+    //}
   }
 }

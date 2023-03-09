@@ -2,6 +2,7 @@ class Monopole {
   float src_pos_x;
   float src_pos_y;
   float src_radiusA;
+  float src_radiusB0;
   float src_radiusB1;
   float src_chargeQa;
   float src_a_cubed; // = src_radiusA^3
@@ -11,20 +12,21 @@ class Monopole {
   Monopole( float pos_x,
             float pos_y, 
             float radiusA, 
-            float radiusB1, 
             float chargeQ ) {
     src_pos_x = pos_x;              
     src_pos_y = pos_y;              
     src_radiusA = radiusA;
-    src_radiusB1 = radiusB1;
+    src_radiusB0 = radiusA * pow(2.0, 1.0/3.0);
+    src_radiusB1 = radiusA * sqrt(2.0);
     src_chargeQa = chargeQ;
-    src_a_cubed = pow(src_radiusA,3);
-    
+    src_a_cubed = pow(src_radiusA, 3);
+
+//println("   src_radiusA = " + src_radiusA );  
+//println("   src_radiusB0 = " + src_radiusB0 );  
+//println("   src_radiusB1 = " + src_radiusB1 ); 
     float fourPi = 4*PI;
     float alpha = pow(2.0, 1.5) - 2.0;
 
-    println(" alpha = ", alpha);
-    
     factor_0_a = -src_chargeQa / (fourPi*src_a_cubed);
     factor_a_b1 = src_chargeQa / (fourPi*src_a_cubed);
     factor_b1 = src_chargeQa * alpha / fourPi;
@@ -35,7 +37,7 @@ class Monopole {
     float r_sq_inverse;
     float pgvr; // pheromone gradient vector, its radial component.
     
-    r_sq_inverse = 1.0 / r*r; // Dangerous... Check if r /= 0.
+    r_sq_inverse = 1.0 / (r*r); // Dangerous... Check if r /= 0.
     
     if ( r <= src_radiusA ) {
       pgvr = factor_0_a * r;
@@ -71,18 +73,7 @@ class Monopole {
     return e1r * sinTheta;                                         
   }  
   
-  float getGradientVectorY( float observer_pos_x,
-                            float observer_pos_y ) {
-    float relative_pos_y;
-    float gv_y;
-    
-    relative_pos_y = observer_pos_y - src_pos_y;
-    gv_y = relative_pos_y;
-    
-    return gv_y;
-  }
   
-
   void show() {
     stroke( 0 );
     fill( 230, 240, 256 );
@@ -95,13 +86,13 @@ class Monopole {
 
 class Pheromone {
   
-  final int MAX_numMonopoles = 10;
+  final int MAX_NUM_MONOPOLES = 10;
   int numMonopoles = 0 ;
   Monopole[] monopoles;
   
 
   Pheromone() {
-    monopoles = new Monopole[MAX_numMonopoles];
+    monopoles = new Monopole[MAX_NUM_MONOPOLES];
   }
 
   
@@ -113,13 +104,11 @@ class Pheromone {
   
   void placeMonopole( float src_pos_x, 
                       float src_pos_y,
-                      float radius_a,
-                      float radius_b ) {
+                      float radius_a ) {
     monopoles[numMonopoles] = new Monopole( src_pos_x, 
-                                             src_pos_y, 
-                                             radius_a,
-                                             radius_b,
-                                             1.0 );
+                                            src_pos_y, 
+                                            radius_a,
+                                            1.e3 );
     numMonopoles += 1;
   }
 
