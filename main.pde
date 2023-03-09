@@ -1,4 +1,5 @@
 /*
+
   abv-2d.pde
  
  */
@@ -8,7 +9,7 @@ boolean runningStateToggle = true;
 
 float simulationTime = 0.0; 
 
-int NUM_AGENTS=200;
+int NUM_AGENTS = 200;
 
 Agent[] agents = new Agent[NUM_AGENTS];
 
@@ -22,11 +23,16 @@ void draw() {
   if ( runningStateToggle ) {
     for ( int i=0; i<NUM_AGENTS; i++ ) {
       agents[i].move( dt );
-      agents[i].show();
     }  
-    simulationTime = simulationTime + dt;  
+    simulationTime += dt;  
     println( " t = " + simulationTime );
   } 
+  
+  pheromone.show();
+  
+  for ( int i=0; i<NUM_AGENTS; i++ ) {
+    agents[i].show();
+  }  
  
 }
 
@@ -53,7 +59,12 @@ void setup() {
     agents[i] = new Agent( x0, y0, vx0, vy0, r, g, b ); 
   }  
   
-  pheromone.placeMonopole( width/2, height/2 );
+  float monopole_radius_a = width/4;
+  float monopole_radius_b = monopole_radius_a * sqrt(2.0);
+  pheromone.placeMonopole( width/4, 
+                           height/3,
+                           monopole_radius_a,
+                           monopole_radius_b );
 }
 
 

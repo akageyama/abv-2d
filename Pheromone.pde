@@ -37,8 +37,18 @@ class Monopole {
     gv_y = relative_pos_y;
     
     return gv_y;
-  }  
+  }
+  
+
+  void show() {
+    stroke( 0 );
+    fill( 230, 240, 256 );
+    circle( src_pos_x, src_pos_y, src_radiusB );
+    fill( 255, 255, 240 );
+    circle( src_pos_x, src_pos_y, src_radiusA );
+  }
 }
+
 
 class Pheromone {
   
@@ -50,9 +60,23 @@ class Pheromone {
   Pheromone() {
     monopoles = new Monopole[MAX_NUM_MONOPOLES];
   }
+
   
-  void placeMonopole( float src_pos_x, float src_pos_y ) {
-    monopoles[num_monopoles] = new Monopole( src_pos_x, src_pos_y, 3.0, 10.0, 1.0 );
+  void show() {
+    for ( int i=0; i<num_monopoles; i++ ) {
+      monopoles[i].show();
+    }
+  }
+  
+  void placeMonopole( float src_pos_x, 
+                      float src_pos_y,
+                      float radius_a,
+                      float radius_b ) {
+    monopoles[num_monopoles] = new Monopole( src_pos_x, 
+                                             src_pos_y, 
+                                             radius_a,
+                                             radius_b,
+                                             1.0 );
     num_monopoles += 1;
   }
 
@@ -64,7 +88,6 @@ class Pheromone {
     for (int i=0; i<num_monopoles; i++) {
       float _pgv_x = monopoles[i].getGradientVectorX( observer_pos_x,
                                                       observer_pos_y );
-println( " in getGradientVector, monopoles[" + i + "].getGradientVectorX(pos) = ",   _pgv_x );
       pgv_x += _pgv_x;
     }
     return pgv_x;
@@ -78,7 +101,6 @@ println( " in getGradientVector, monopoles[" + i + "].getGradientVectorX(pos) = 
     for (int i=0; i<num_monopoles; i++) {
       float _pgv_y = monopoles[i].getGradientVectorY( observer_pos_x,
                                                       observer_pos_y );
-println( " in getGradientVector, monopoles[" + i + "].getGradientVectorY(pos) = ",   _pgv_y );
       pgv_y += _pgv_y;
     }
     return pgv_y;

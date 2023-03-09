@@ -28,7 +28,6 @@ class Agent {
     pgv_x = pheromone.getGradientVectorX( pos_x, pos_y );
     pgv_y = pheromone.getGradientVectorY( pos_x, pos_y );
 
-println( pos_x, pos_y, vel_x, vel_y );
     dvel_x = FACTOR * pgv_x;
     dvel_y = FACTOR * pgv_y;
     
