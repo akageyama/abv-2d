@@ -8,7 +8,7 @@ boolean runningStateToggle = true;
 
 float simulationTime = 0.0; 
 
-int NUM_AGENTS=100;
+int NUM_AGENTS=200;
 
 Agent[] agents = new Agent[NUM_AGENTS];
 
@@ -18,25 +18,16 @@ void draw() {
   float dt = 0.1; // delta t (time increment).
   
   background( 150, 150, 200 );
-  
 
   if ( runningStateToggle ) {
     for ( int i=0; i<NUM_AGENTS; i++ ) {
       agents[i].move( dt );
+      agents[i].show();
     }  
     simulationTime = simulationTime + dt;  
     println( " t = " + simulationTime );
-  }   
+  } 
  
-  PVector pg;
-  PVector pos = new PVector(100,100);
-  
-  for ( int i=0; i<NUM_AGENTS; i++ ) {
-    agents[i].show();
-    // pg = pheromone.getPheromoneGradient( pos );
-    pg = pheromone.getField( pos );
-    println(pg);
-  }
 }
 
 
@@ -51,7 +42,7 @@ void setup() {
     float x0 = random( width );
     float y0 = random( height );
     // velocity
-    float vel = random( minVelocity, maxVelocity );
+    float vel = 0.0; // random( minVelocity, maxVelocity );
     float angle = random( 0, TWO_PI );
     float vx0 = vel*cos( angle );
     float vy0 = vel*sin( angle );
@@ -62,8 +53,7 @@ void setup() {
     agents[i] = new Agent( x0, y0, vx0, vy0, r, g, b ); 
   }  
   
-  PVector pos = new PVector(300,300);
-  pheromone.placeMonopole( pos );
+  pheromone.placeMonopole( width/2, height/2 );
 }
 
 
