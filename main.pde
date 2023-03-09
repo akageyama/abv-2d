@@ -59,12 +59,12 @@ void setup() {
     agents[i] = new Agent( x0, y0, vx0, vy0, r, g, b ); 
   }  
   
-  float monopole_radius_a = width/4;
-  float monopole_radius_b = monopole_radius_a * sqrt(2.0);
+  float monopole_radiusA = width/4;
+  float monopole_radiusB1 = monopole_radiusA * sqrt(2.0);
   pheromone.placeMonopole( width/4, 
                            height/3,
-                           monopole_radius_a,
-                           monopole_radius_b );
+                           monopole_radiusA,
+                           monopole_radiusB1 );
 }
 
 
