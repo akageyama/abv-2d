@@ -9,7 +9,7 @@ boolean runningStateToggle = true;
 
 float simulationTime = 0.0; 
 
-int NUM_AGENTS = 8;
+int NUM_AGENTS = 100;
 
 Agent[] agents = new Agent[NUM_AGENTS];
 

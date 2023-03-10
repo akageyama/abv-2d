@@ -22,21 +22,20 @@ class Agent {
 
 
   void move(float dt) {
-    float pgv_x, pgv_y, dvel_x, dvel_y;
+    float pgv_x, pgv_y, force_x, force_y;
     final float FACTOR_INERTIA = -1; // camera is negatively charged.
     final float FACTOR_FRICTION = 1.e-3;
     
     pgv_x = pheromone.getGradientVectorX( pos_x, pos_y );
     pgv_y = pheromone.getGradientVectorY( pos_x, pos_y );
 
-    dvel_x = FACTOR_INERTIA * pgv_x - FACTOR_FRICTION * vel_x;
-    dvel_y = FACTOR_INERTIA * pgv_y - FACTOR_FRICTION * vel_y;
-    
+    force_x = FACTOR_INERTIA * pgv_x - FACTOR_FRICTION * vel_x;
+    force_y = FACTOR_INERTIA * pgv_y - FACTOR_FRICTION * vel_y;
     pos_x += vel_x*dt;  // shift the ball position in x.
     pos_y += vel_y*dt;  // ... in y.
     
-    vel_x += dvel_x;
-    vel_y += dvel_y;
+    vel_x += force_x*dt;
+    vel_y += force_y*dt;
     
     //if ( pos_x >= width ) {// The ball hits the right wall. 
     //  pos_x = width;

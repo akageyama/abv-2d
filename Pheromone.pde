@@ -23,7 +23,7 @@ class Monopole {
 
 //println("   src_radiusA = " + src_radiusA );  
 //println("   src_radiusB0 = " + src_radiusB0 );  
-//println("   src_radiusB1 = " + src_radiusB1 ); 
+//println("   src_radiusB1 = " + src_radiusB1 );
     float fourPi = 4*PI;
     float alpha = pow(2.0, 1.5) - 2.0;
 
@@ -57,7 +57,6 @@ class Monopole {
     float cosTheta = ( observer_pos_x - src_pos_x ) / r;
     
     float e1r = gradientVectorR( r );
-    
     return e1r * cosTheta;                                         
   }
   
@@ -77,9 +76,9 @@ class Monopole {
   void show() {
     stroke( 0 );
     fill( 230, 240, 256 );
-    circle( src_pos_x, src_pos_y, src_radiusB1 );
+    circle( src_pos_x, src_pos_y, 2*src_radiusB1 );
     fill( 255, 255, 240 );
-    circle( src_pos_x, src_pos_y, src_radiusA );
+    circle( src_pos_x, src_pos_y, 2*src_radiusA );
   }
 }
 
