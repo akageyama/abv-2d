@@ -29,8 +29,13 @@ class Agent {
     pgv_x = pheromone.getGradientVectorX( pos_x, pos_y );
     pgv_y = pheromone.getGradientVectorY( pos_x, pos_y );
 
-    force_x = FACTOR_INERTIA * pgv_x - FACTOR_FRICTION * vel_x;
-    force_y = FACTOR_INERTIA * pgv_y - FACTOR_FRICTION * vel_y;
+    // force_x = FACTOR_INERTIA * pgv_x - FACTOR_FRICTION * vel_x;
+    // force_y = FACTOR_INERTIA * pgv_y - FACTOR_FRICTION * vel_y;
+    
+    float normalization_factor = 1.e-3 / dist( 0, 0, pgv_x, pgv_y );
+    force_x = pgv_x * normalization_factor; 
+    force_y = pgv_y * normalization_factor; 
+    
     pos_x += vel_x*dt;  // shift the ball position in x.
     pos_y += vel_y*dt;  // ... in y.
     

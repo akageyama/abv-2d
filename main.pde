@@ -15,6 +15,7 @@ Agent[] agents = new Agent[NUM_AGENTS];
 
 Pheromone pheromone = new Pheromone();
 
+
 void draw() {
   float dt = 0.1; // delta t (time increment).
   
@@ -56,11 +57,27 @@ void setup() {
     agents[i] = new Agent( x0, y0, vx0, vy0, r, g, b ); 
   }  
   
-  float monopole_radiusA = width/6;
-  pheromone.placeMonopole( width/2, 
-                           height/2,
-                           monopole_radiusA );
-}
+  float radiusA = width/20;
+  
+  //// place monopoles
+  //pheromone.placeMonopole( width/2 - width/4, 
+  //                         height/2 - width/12,
+  //                         radiusA,
+  //                         1.e3 );
+  //pheromone.placeMonopole( width/2 + width/4, 
+  //                         height/2 + width/12,
+  //                         radiusA,
+  //                         1.e3 );
+  
+  // place dipoles
+  pheromone.placeDipole( width/2, 
+                         height/2,
+                         radiusA,
+                         1.e3, 
+                         1.0,
+                         0.0 );
+  
+  }
 
 
 void mousePressed() {
