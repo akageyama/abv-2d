@@ -82,6 +82,96 @@ class Monopole {
   }
 }
 
+class Dipole {
+  float src_pos_x;
+  float src_pos_y;
+  float src_radiusA;
+  float src_radiusB0;
+  float src_radiusB1;
+  float src_chargeQa;
+  float src_momentPx;
+  float src_momentPy;
+  float src_a_cubed; // = src_radiusA^3
+  
+  float factor_0_a, factor_a_b1, factor_b1;
+
+  Dipole( float pos_x,
+          float pos_y, 
+          float radiusA, 
+          float chargeQ,
+          float momentPx,
+          float momentPy ) {
+    src_pos_x = pos_x;              
+    src_pos_y = pos_y;              
+    src_radiusA = radiusA;
+    src_radiusB0 = radiusA * pow(2.0, 1.0/3.0);
+    src_radiusB1 = radiusA * sqrt(2.0);
+    src_chargeQa = chargeQ;
+    src_momentPx = momentPx;
+    src_momentPy = momentPy;
+    src_a_cubed = pow(src_radiusA, 3);
+
+    float fourPi = 4*PI;
+    float alpha = pow(2.0, 1.5) - 2.0;
+
+    factor_0_a = -src_chargeQa / (fourPi*src_a_cubed);
+    factor_a_b1 = src_chargeQa / (fourPi*src_a_cubed);
+    factor_b1 = src_chargeQa * alpha / fourPi;
+  }
+  
+  
+  float gradientVectorR( float r ) {
+    float pgvr; // pheromone gradient vector, its radial component.
+    
+    r_sq_inverse = 1.0 / (r*r); // Dangerous... Check if r /= 0.
+    
+    if ( r <= src_radiusA ) {
+      pgvr = factor_0_a * r;
+    } else if ( r <= src_radiusB1 ) {
+      pgvr = factor_a_b1 * (r-2*src_a_cubed*r_sq_inverse);
+    } else { // src_radiusB1 < r      
+      pgvr = factor_b1 * r_sq_inverse;
+    }
+    return pgvr;          
+  }
+  
+  float getGradientVectorX( float observer_pos_x,
+                            float observer_pos_y ) {
+    
+    float r = dist( src_pos_x,      src_pos_y,
+                    observer_pos_x, observer_pos_y );
+    float r_sq_inverse = 1.0 / (r*r);
+    float r_cubed_inverse = 1.0 / (r*r*r);
+    float momentP_dot_positionR = 
+    
+    float gv_x = 
+    
+    float e1r = gradientVectorR( r );
+    return e1r * cosTheta;                                         
+  }
+  
+  float getGradientVectorY( float observer_pos_x,
+                            float observer_pos_y ) {
+    float r = dist( src_pos_x,      src_pos_y,
+                    observer_pos_x, observer_pos_y );
+
+    float sinTheta = ( observer_pos_y - src_pos_y ) / r;
+    
+    float e1r = gradientVectorR( r );
+    
+    return e1r * sinTheta;                                         
+  }  
+  
+  
+  void show() {
+    stroke( 0 );
+    fill( 230, 240, 256 );
+    circle( src_pos_x, src_pos_y, 2*src_radiusB1 );
+    fill( 255, 255, 240 );
+    circle( src_pos_x, src_pos_y, 2*src_radiusA );
+  }
+}
+
 
 class Pheromone {
   
