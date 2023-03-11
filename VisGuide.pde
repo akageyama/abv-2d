@@ -1,4 +1,4 @@
-class Pheromone {
+class VisGuide {
   
   final int MAX_NUM_MONOPOLES = 10;
   int numMonopoles = 0 ;
@@ -9,7 +9,7 @@ class Pheromone {
   Dipole[] dipoles;
   
 
-  Pheromone() {
+  VisGuide() {
     monopoles = new Monopole[MAX_NUM_MONOPOLES];
     dipoles   = new Dipole[MAX_NUM_DIPOLES];
   }

@@ -31,7 +31,7 @@ class Dipole {
     src_radiusB0 = radiusA * pow(2.0, 1.0/3.0);
     src_radiusB1 = radiusA * sqrt(2.0);
     src_chargeQa = chargeQa;
-    src_radiusCutOff = radiusA*10;
+    src_radiusCutOff = radiusA*15;
     
     float p_amplitude = pow(2.0, 1.5) * chargeQa;
     

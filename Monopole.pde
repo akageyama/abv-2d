@@ -21,7 +21,7 @@ class Monopole {
     src_radiusB1 = radiusA * sqrt(2.0);
     src_chargeQa = chargeQa;
     src_a_cubed = pow(src_radiusA, 3);
-    src_radiusCutOff = radiusA*10;
+    src_radiusCutOff = radiusA*15;
 
     float fourPi = 4*PI;
     float alpha = pow(2.0, 1.5) - 2.0;

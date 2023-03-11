@@ -5,6 +5,7 @@ class Agent {
   color col;    // color.
   final float MASS = 0.01;
   final float SPEED_LIMIT = 1;
+  float chargeQ = -1.0;
 
   Agent( float xInit,  float yInit, 
          float vxInit, float vyInit, 
@@ -24,25 +25,16 @@ class Agent {
 
 
   void move(float dt) {
-    //float pgv_x, pgv_y, force_x, force_y;
-    //final float FACTOR_INERTIA = -0.1; // camera is negatively charged.
-    //final float FACTOR_FRICTION = 1.e-3;
-    
-    //pgv_x = pheromone.getGradientVectorX( pos_x, pos_y );
-    //pgv_y = pheromone.getGradientVectorY( pos_x, pos_y );
-
-    //force_x = FACTOR_INERTIA * pgv_x - FACTOR_FRICTION * vel_x;
-    //force_y = FACTOR_INERTIA * pgv_y - FACTOR_FRICTION * vel_y;
     
     float[] force = new float[2];
     
     for ( int i=0; i<2; i++ ) {
-      pheromone.getForce( -1.0,
-                          pos_x,
-                          pos_y,
-                          vel_x,
-                          vel_y,
-                          force );
+      visGuide.getForce( chargeQ,
+                         pos_x,
+                         pos_y,
+                         vel_x,
+                         vel_y,
+                         force );
     }
         
     pos_x += vel_x*dt;  // shift the ball position in x.

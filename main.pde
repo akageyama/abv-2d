@@ -9,11 +9,11 @@ boolean runningStateToggle = true;
 
 float simulationTime = 0.0; 
 
-int NUM_AGENTS = 100;
+int NUM_AGENTS = 100;  // number of camera agents
 
 Agent[] agents = new Agent[NUM_AGENTS];
 
-Pheromone pheromone = new Pheromone();
+VisGuide visGuide = new VisGuide();
 
 
 void draw() {
@@ -31,7 +31,7 @@ void draw() {
     println( " t = " + simulationTime );
   } 
   
-  pheromone.show();
+  visGuide.show();
   
   for ( int i=0; i<NUM_AGENTS; i++ ) {
     agents[i].show();
@@ -64,7 +64,7 @@ void setup() {
   for ( int p=0; p<1; p++ ) {
     float pos_x = random( width*0.1, width*0.5 );
     float pos_y = random( height*0.1, height*0.9 );
-    pheromone.placeMonopole(pos_x, pos_y, radiusA, chargeQa );
+    visGuide.placeMonopole(pos_x, pos_y, radiusA, chargeQa );
   }
                            
   
@@ -75,8 +75,8 @@ void setup() {
     float momentAngle = random( 0, TWO_PI );
     float momentPx = cos(momentAngle);
     float momentPy = sin(momentAngle);
-    pheromone.placeDipole( pos_x, pos_y, radiusA, chargeQa,
-                           momentPx, momentPy );
+    visGuide.placeDipole( pos_x, pos_y, radiusA, chargeQa,
+                          momentPx, momentPy );
     }
   }
 
