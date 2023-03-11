@@ -25,6 +25,7 @@ void draw() {
     for ( int repeat = 0; repeat< 20; repeat++ ) {
       for ( int i=0; i<NUM_AGENTS; i++ ) {
         agents[i].move( dt );
+        //agents[i].moveAlongFieldLine();
       }
     }
     simulationTime += dt;  
@@ -57,25 +58,27 @@ void setup() {
     agents[i] = new Agent( x0, y0, vx0, vy0, r, g, b ); 
   }  
   
-  float radiusA = width/20;
+  float radiusA = width/60;
   
-  //// place monopoles
-  //pheromone.placeMonopole( width/2 - width/4, 
-  //                         height/2 - width/12,
-  //                         radiusA,
-  //                         1.e3 );
+  // place monopoles
+  pheromone.placeMonopole( width/2 - width/4, 
+                           height/2 - width/12,
+                           radiusA,
+                           1.e3 );
   //pheromone.placeMonopole( width/2 + width/4, 
   //                         height/2 + width/12,
   //                         radiusA,
   //                         1.e3 );
   
   // place dipoles
-  pheromone.placeDipole( width/2, 
-                         height/2,
+  float momentPx = cos(PI/6);
+  float momentPy = sin(PI/6);
+  pheromone.placeDipole( width/2 + width/4, 
+                         height/2 + width/12,
                          radiusA,
                          1.e3, 
-                         1.0,
-                         0.0 );
+                         momentPx,
+                         momentPy );
   
   }
 

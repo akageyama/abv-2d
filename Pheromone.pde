@@ -100,7 +100,7 @@ class Dipole {
   Dipole( float pos_x,
           float pos_y, 
           float radiusA, 
-          float chargeQ,
+          float chargeQa,
           float momentPxUnitVector,
           float momentPyUnitVector ) {
     src_pos_x = pos_x;              
@@ -108,9 +108,10 @@ class Dipole {
     src_radiusA = radiusA;
     src_radiusB0 = radiusA * pow(2.0, 1.0/3.0);
     src_radiusB1 = radiusA * sqrt(2.0);
-    src_chargeQa = chargeQ;
+    src_chargeQa = chargeQa;
     
-    float p_amplitude = pow(2.0, 1.5) * chargeQ;
+//    float p_amplitude = pow(2.0, 1.5) * chargeQa;
+    float p_amplitude =  chargeQa;
     
     src_momentPx = p_amplitude * momentPxUnitVector;
     src_momentPy = p_amplitude * momentPyUnitVector;
@@ -118,11 +119,11 @@ class Dipole {
     float src_a_cubed = pow(radiusA, 3);
     float fourPi = 4*PI;
 
-    factor_0_a   = -src_chargeQa / (fourPi*src_a_cubed);
+    factor_0_a   = src_chargeQa / (fourPi*src_a_cubed);
     factor_a_b0_1st = src_chargeQa / (fourPi*src_a_cubed);
     factor_a_b0_2nd = 2*src_a_cubed;
-    factor_b0_b1 = -1.0 / fourPi;
-    factor_b1    = -1.0 / fourPi;
+    factor_b0_b1 = 1.0 / fourPi;
+    factor_b1    = 1.0 / fourPi;
   }
   
 
@@ -141,17 +142,17 @@ class Dipole {
     float pgv_x;    
     
     if ( r <= src_radiusA ) {
-      pgv_x = factor_0_a * relative_pos_x;
+      pgv_x = -factor_0_a * relative_pos_x;
     } else if ( r <= src_radiusB0 ) {
       pgv_x = factor_a_b0_1st * relative_pos_x 
                               * ( 1.0 - factor_a_b0_2nd * r_cb_inverse );
     } else if ( r <= src_radiusB1 ) {
       float attenuation_factor = (r-src_radiusB0)/(src_radiusB1-src_radiusB0);
       float factor = factor_b0_b1 * attenuation_factor * r_sq_inverse; 
-      pgv_x = factor * ( src_momentPx - two_p_dot_r * relative_pos_x * r_sq_inverse );
+      pgv_x = -factor * ( src_momentPx - two_p_dot_r * relative_pos_x * r_sq_inverse );
     } else { // src_radiusB1 < r      
-      float factor = factor_b0_b1 * r_sq_inverse; 
-      pgv_x = factor * ( src_momentPx - two_p_dot_r * relative_pos_x * r_sq_inverse );
+      float factor = factor_b1 * r_sq_inverse; 
+      pgv_x = -factor * ( src_momentPx - two_p_dot_r * relative_pos_x * r_sq_inverse );
     }    
     return pgv_x;                                         
   }
@@ -172,17 +173,17 @@ class Dipole {
     float pgv_y;    
     
     if ( r <= src_radiusA ) {
-      pgv_y = factor_0_a * relative_pos_y;
+      pgv_y = -factor_0_a * relative_pos_y;
     } else if ( r <= src_radiusB0 ) {
       pgv_y = factor_a_b0_1st * relative_pos_y 
                               * ( 1.0 - factor_a_b0_2nd * r_cb_inverse );
     } else if ( r <= src_radiusB1 ) {
       float attenuation_factor = (r-src_radiusB0)/(src_radiusB1-src_radiusB0);
       float factor = factor_b0_b1 * attenuation_factor * r_sq_inverse; 
-      pgv_y = factor * ( src_momentPy - two_p_dot_r * relative_pos_y * r_sq_inverse );
+      pgv_y = - factor * ( src_momentPy - two_p_dot_r * relative_pos_y * r_sq_inverse );
     } else { // src_radiusB1 < r      
-      float factor = factor_b0_b1 * r_sq_inverse; 
-      pgv_y = factor * ( src_momentPy - two_p_dot_r * relative_pos_y * r_sq_inverse );
+      float factor = factor_b1 * r_sq_inverse; 
+      pgv_y = - factor * ( src_momentPy - two_p_dot_r * relative_pos_y * r_sq_inverse );
     }    
     return pgv_y;                                         
   }
