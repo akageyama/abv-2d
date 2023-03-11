@@ -70,15 +70,15 @@ void setup() {
   //                         radiusA,
   //                         1.e3 );
   
-  // place dipoles
-  float momentPx = cos(PI/6);
-  float momentPy = sin(PI/6);
-  pheromone.placeDipole( width/2 + width/4, 
-                         height/2 + width/12,
-                         radiusA,
-                         1.e3, 
-                         momentPx,
-                         momentPy );
+  //// place dipoles
+  //float momentPx = cos(PI/6);
+  //float momentPy = sin(PI/6);
+  //pheromone.placeDipole( width/2 + width/4, 
+  //                       height/2 + width/12,
+  //                       radiusA,
+  //                       1.e3, 
+  //                       momentPx,
+  //                       momentPy );
   
   }
 

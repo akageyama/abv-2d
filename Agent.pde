@@ -22,15 +22,26 @@ class Agent {
 
 
   void move(float dt) {
-    float pgv_x, pgv_y, force_x, force_y;
-    final float FACTOR_INERTIA = -0.1; // camera is negatively charged.
-    final float FACTOR_FRICTION = 1.e-3;
+    //float pgv_x, pgv_y, force_x, force_y;
+    //final float FACTOR_INERTIA = -0.1; // camera is negatively charged.
+    //final float FACTOR_FRICTION = 1.e-3;
     
-    pgv_x = pheromone.getGradientVectorX( pos_x, pos_y );
-    pgv_y = pheromone.getGradientVectorY( pos_x, pos_y );
+    //pgv_x = pheromone.getGradientVectorX( pos_x, pos_y );
+    //pgv_y = pheromone.getGradientVectorY( pos_x, pos_y );
 
-    force_x = FACTOR_INERTIA * pgv_x - FACTOR_FRICTION * vel_x;
-    force_y = FACTOR_INERTIA * pgv_y - FACTOR_FRICTION * vel_y;
+    //force_x = FACTOR_INERTIA * pgv_x - FACTOR_FRICTION * vel_x;
+    //force_y = FACTOR_INERTIA * pgv_y - FACTOR_FRICTION * vel_y;
+    
+    float force_x = pheromone.getForceX( -1.0,
+                                         pos_x,
+                                         pos_y,
+                                         vel_x,
+                                         vel_y);
+    float force_y = pheromone.getForceY( -1.0,
+                                         pos_x,
+                                         pos_y,
+                                         vel_x,
+                                         vel_y);
         
     pos_x += vel_x*dt;  // shift the ball position in x.
     pos_y += vel_y*dt;  // ... in y.

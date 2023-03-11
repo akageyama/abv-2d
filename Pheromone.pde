@@ -30,44 +30,102 @@ class Monopole {
   }
   
   
-  float gradientVectorR( float r ) {
-    float r_sq_inverse;
-    float pgvr; // pheromone gradient vector, its radial component.
+  void getGradientVector( float observer_pos_x,
+                          float observer_pos_y
+                          float[] pgvec)
+  {
+    float relative_pos_x = observer_pos_x - src_pos_x;
+    float relative_pos_y = observer_pos_y - src_pos_y;
     
-    r_sq_inverse = 1.0 / (r*r); // Dangerous... Check if r /= 0.
+    float r = dist( 0, 0, relative_pos_x, relative_pos_y );
+    
+    float r_sq_inverse = 1.0 / (r*r); // Dangerous... Check if r /= 0.
+    float pgvec_r;
     
     if ( r <= src_radiusA ) {
-      pgvr = factor_0_a * r;
+      pgvec_r = factor_0_a * r;
     } else if ( r <= src_radiusB1 ) {
-      pgvr = factor_a_b1 * (r-2*src_a_cubed*r_sq_inverse);
+      pgvec_r = factor_a_b1 * (r-2*src_a_cubed*r_sq_inverse);
     } else { // src_radiusB1 < r      
-      pgvr = factor_b1 * r_sq_inverse;
+      pgvec_r = factor_b1 * r_sq_inverse;
     }
-    return pgvr;          
-  }
-  
-  float getGradientVectorX( float observer_pos_x,
-                            float observer_pos_y ) {
-    float r = dist( src_pos_x,      src_pos_y,
-                    observer_pos_x, observer_pos_y );
 
-    float cosTheta = ( observer_pos_x - src_pos_x ) / r;
-    
-    float e1r = gradientVectorR( r );
-    return e1r * cosTheta;                                         
-  }
-  
-  float getGradientVectorY( float observer_pos_x,
-                            float observer_pos_y ) {
-    float r = dist( src_pos_x,      src_pos_y,
-                    observer_pos_x, observer_pos_y );
-
-    float sinTheta = ( observer_pos_y - src_pos_y ) / r;
-    
-    float e1r = gradientVectorR( r );
-    
-    return e1r * sinTheta;                                         
+    pgvec[0] = pgvec_r * relative_pos_x / r;
+    pgvec[1] = pgvec_r * relative_pos_y / r;
   }  
+  
+  
+  float getForce( float observer_chargeQ,
+                  float observer_pos_x,
+                  float observer_pos_y,
+                  float observer_vel_x,
+                  float observer_vel_y,
+                  float[] force) 
+  {
+
+    float BASE_FRICTION = 1.e-3;
+    float relative_pos_x = observer_pos_x - src_pos_x;
+    float relative_pos_y = observer_pos_y - src_pos_y;
+    float r_dot_v = relative_pos_x * observer_vel_x 
+                  + relative_pos_y * observer_vel_y;
+    float r = dist( 0, 0, relative_pos_x, relative_pos_y );
+                                           
+    float directive_friction_radius = src_radiusA*3;
+    float fiction_coeff;
+    
+    if ( r_dot_v < 0  && r <= directive_friction_radius )
+      fiction_coeff = BASE_FRICTION * ( directive_friction_radius - r ) + BASE_FRICTION;
+    else 
+      fiction_coeff = BASE_FRICTION;
+
+    float[2] pgvec:
+    
+    getGradientVector( float observer_pos_x,
+                          float observer_pos_y
+                          float[] pgvec)
+    
+    
+    for ( int i=0; i<2; i++ ) {
+          
+      float pgvec = 
+    }
+    float pgv_x = getGradientVectorX( observer_pos_x,
+                                      observer_pos_y );
+                         
+    float force_x = observer_chargeQ * pgv_x - fiction_coeff * observer_vel_x;
+
+    return force_x;                                 
+  }
+  
+  
+  float getForceY( float observer_chargeQ,
+                   float observer_pos_x,
+                   float observer_pos_y,
+                   float observer_vel_x,
+                   float observer_vel_y ) {
+
+    float BASE_FRICTION = 1.e-3;
+    float relative_pos_x = observer_pos_x - src_pos_x;
+    float relative_pos_y = observer_pos_y - src_pos_y;
+    float r_dot_v = relative_pos_x * observer_vel_x 
+                  + relative_pos_y * observer_vel_y;
+    float r = dist( 0, 0, relative_pos_x, relative_pos_y );
+                                           
+    float directive_friction_radius = src_radiusA*3;
+    float fiction_coeff;
+    
+    if ( r_dot_v < 0  && r <= directive_friction_radius )
+      fiction_coeff = BASE_FRICTION * ( directive_friction_radius - r ) + BASE_FRICTION;
+    else 
+      fiction_coeff = BASE_FRICTION;
+
+    float pgv_y = getGradientVectorX( observer_pos_x,
+                                      observer_pos_y );    
+    float force_y = observer_chargeQ * pgv_y - fiction_coeff * observer_vel_y;
+
+    return force_y;                                 
+  }     
+                   
   
   
   void show() {
@@ -189,6 +247,66 @@ class Dipole {
   }
   
   
+  
+  float getForceX( float observer_chargeQ,
+                   float observer_pos_x,
+                   float observer_pos_y,
+                   float observer_vel_x,
+                   float observer_vel_y ) {
+
+    float BASE_FRICTION = 1.e-3;
+    float relative_pos_x = observer_pos_x - src_pos_x;
+    float relative_pos_y = observer_pos_y - src_pos_y;
+    float r_dot_v = relative_pos_x * observer_vel_x 
+                  + relative_pos_y * observer_vel_y;
+    float r = dist( 0, 0, relative_pos_x, relative_pos_y );
+                                           
+    float directive_friction_radius = src_radiusA*3;
+    float fiction_coeff;
+    
+    if ( r_dot_v < 0  && r <= directive_friction_radius )
+      fiction_coeff = BASE_FRICTION * ( directive_friction_radius - r ) + BASE_FRICTION;
+    else 
+      fiction_coeff = BASE_FRICTION;
+      
+    float pgv_x = getGradientVectorX( observer_pos_x,
+                                      observer_pos_y );
+    float force_x = observer_chargeQ * pgv_x - fiction_coeff * observer_vel_x;
+
+    return force_x;                                 
+  }
+  
+  
+  float getForceY( float observer_chargeQ,
+                   float observer_pos_x,
+                   float observer_pos_y,
+                   float observer_vel_x,
+                   float observer_vel_y ) {
+
+    float BASE_FRICTION = 1.e-3;
+    float relative_pos_x = observer_pos_x - src_pos_x;
+    float relative_pos_y = observer_pos_y - src_pos_y;
+    float r_dot_v = relative_pos_x * observer_vel_x 
+                  + relative_pos_y * observer_vel_y;
+    float r = dist( 0, 0, relative_pos_x, relative_pos_y );
+                                           
+    float directive_friction_radius = src_radiusA*3;
+    float fiction_coeff;
+    
+    if ( r_dot_v < 0  && r <= directive_friction_radius )
+      fiction_coeff = BASE_FRICTION * ( directive_friction_radius - r ) + BASE_FRICTION;
+    else 
+      fiction_coeff = BASE_FRICTION;
+    
+    float pgv_y = getGradientVectorY( observer_pos_x,
+                                      observer_pos_y );
+      
+    float force_y = observer_chargeQ * pgv_y - fiction_coeff * observer_vel_y;
+
+    return force_y;                                 
+  }    
+  
+  
   void show() {
     stroke( 0 );
     fill( 230, 240, 255 );
@@ -256,42 +374,101 @@ class Pheromone {
   }
 
 
-  float getGradientVectorX( float observer_pos_x, 
-                            float observer_pos_y) {
-    float pgv_x = 0.0; // pheromone gradient vector
+  //float getGradientVectorX( float observer_pos_x, 
+  //                          float observer_pos_y) {
+  //  float pgv_x = 0.0; // pheromone gradient vector
+    
+  //  for (int i=0; i<numMonopoles; i++) {
+  //    float _pgv_x = monopoles[i].getGradientVectorX( observer_pos_x,
+  //                                                    observer_pos_y );
+  //    pgv_x += _pgv_x;
+  //  }
+    
+  //  for (int i=0; i<numDipoles; i++) {
+  //    float _pgv_x = dipoles[i].getGradientVectorX( observer_pos_x,
+  //                                                  observer_pos_y );
+  //    pgv_x += _pgv_x;
+  //  }
+    
+  //  return pgv_x;
+  //}
+
+
+  //float getGradientVectorY( float observer_pos_x, 
+  //                          float observer_pos_y) {
+  //  float pgv_y = 0.0; // pheromone gradient vector
+    
+  //  for (int i=0; i<numMonopoles; i++) {
+  //    float _pgv_y = monopoles[i].getGradientVectorY( observer_pos_x,
+  //                                                    observer_pos_y );
+  //    pgv_y += _pgv_y;
+  //  }
+    
+  //  for (int i=0; i<numDipoles; i++) {
+  //    float _pgv_y = dipoles[i].getGradientVectorY( observer_pos_x,
+  //                                                  observer_pos_y );
+  //    pgv_y += _pgv_y;
+  //  }  
+    
+  //  return pgv_y;
+  //}  
+
+
+  float getForceX( float observer_chargeQ,
+                   float observer_pos_x, 
+                   float observer_pos_y,
+                   float observer_vel_x,
+                   float observer_vel_y ) {
+    float force_x = 0.0;
     
     for (int i=0; i<numMonopoles; i++) {
-      float _pgv_x = monopoles[i].getGradientVectorX( observer_pos_x,
-                                                      observer_pos_y );
-      pgv_x += _pgv_x;
+      float _force_x = monopoles[i].getForceX( observer_chargeQ,
+                                               observer_pos_x,
+                                               observer_pos_y,
+                                               observer_vel_x,
+                                               observer_vel_y );
+      force_x += _force_x;
     }
     
     for (int i=0; i<numDipoles; i++) {
-      float _pgv_x = dipoles[i].getGradientVectorX( observer_pos_x,
-                                                    observer_pos_y );
-      pgv_x += _pgv_x;
+      float _force_x = dipoles[i].getForceX( observer_chargeQ,
+                                             observer_pos_x,
+                                             observer_pos_y,
+                                             observer_vel_x,
+                                             observer_vel_y );
+      force_x += _force_x;
     }
     
-    return pgv_x;
+    return force_x;
   }
+  
 
-
-  float getGradientVectorY( float observer_pos_x, 
-                            float observer_pos_y) {
-    float pgv_y = 0.0; // pheromone gradient vector
+  float getForceY( float observer_chargeQ,
+                   float observer_pos_x, 
+                   float observer_pos_y,
+                   float observer_vel_x,
+                   float observer_vel_y ) {
+    float force_y = 0.0;
     
     for (int i=0; i<numMonopoles; i++) {
-      float _pgv_y = monopoles[i].getGradientVectorY( observer_pos_x,
-                                                      observer_pos_y );
-      pgv_y += _pgv_y;
+      float _force_y = monopoles[i].getForceY( observer_chargeQ,
+                                               observer_pos_x,
+                                               observer_pos_y,
+                                               observer_vel_x,
+                                               observer_vel_y );
+      force_y += _force_y;
     }
     
     for (int i=0; i<numDipoles; i++) {
-      float _pgv_y = dipoles[i].getGradientVectorY( observer_pos_x,
-                                                    observer_pos_y );
-      pgv_y += _pgv_y;
-    }  
+      float _force_y = dipoles[i].getForceY( observer_chargeQ,
+                                             observer_pos_x,
+                                             observer_pos_y,
+                                             observer_vel_x,
+                                             observer_vel_y );
+      force_y += _force_y;
+    }
     
-    return pgv_y;
+    return force_y;
   }  
+  
 }
