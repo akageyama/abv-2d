@@ -32,22 +32,22 @@ class Agent {
     //force_x = FACTOR_INERTIA * pgv_x - FACTOR_FRICTION * vel_x;
     //force_y = FACTOR_INERTIA * pgv_y - FACTOR_FRICTION * vel_y;
     
-    float force_x = pheromone.getForceX( -1.0,
-                                         pos_x,
-                                         pos_y,
-                                         vel_x,
-                                         vel_y);
-    float force_y = pheromone.getForceY( -1.0,
-                                         pos_x,
-                                         pos_y,
-                                         vel_x,
-                                         vel_y);
+    float[] force = new float[2];
+    
+    for ( int i=0; i<2; i++ ) {
+      pheromone.getForceX( -1.0,
+                           pos_x,
+                           pos_y,
+                           vel_x,
+                           vel_y,
+                           force );
+    }
         
     pos_x += vel_x*dt;  // shift the ball position in x.
     pos_y += vel_y*dt;  // ... in y.
     
-    vel_x += force_x*dt;
-    vel_y += force_y*dt;
+    vel_x += force[0]*dt;
+    vel_y += force[1]*dt;
   }
   
 
