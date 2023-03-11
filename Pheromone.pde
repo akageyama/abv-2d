@@ -192,11 +192,11 @@ class Dipole {
   void show() {
     stroke( 0 );
     fill( 230, 240, 255 );
-    circle( src_pos_x, src_pos_y, 2*src_radiusB1 );
+    ellipse( src_pos_x, src_pos_y, 2*src_radiusB1, 2*src_radiusB1 );
     fill( 255, 240, 230 );
-    circle( src_pos_x, src_pos_y, 2*src_radiusB1 );
+    ellipse( src_pos_x, src_pos_y, 2*src_radiusB1, 2*src_radiusB1 );
     fill( 255, 255, 240 );
-    circle( src_pos_x, src_pos_y, 2*src_radiusA );
+    ellipse( src_pos_x, src_pos_y, 2*src_radiusA, 2*src_radiusA );
   }
 }
 
