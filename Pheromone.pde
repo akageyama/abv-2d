@@ -1,12 +1,10 @@
-
-
 class Pheromone {
   
   final int MAX_NUM_MONOPOLES = 10;
   int numMonopoles = 0 ;
   Monopole[] monopoles;
   
-  final int MAX_NUM_DIPOLES   = 10;
+  final int MAX_NUM_DIPOLES = 10;
   int numDipoles = 0 ;
   Dipole[] dipoles;
   
@@ -29,7 +27,8 @@ class Pheromone {
   void placeMonopole( float src_pos_x, 
                       float src_pos_y,
                       float src_radius_a,
-                      float src_chargeQa ) {
+                      float src_chargeQa ) 
+  {
     monopoles[numMonopoles] = new Monopole( src_pos_x, 
                                             src_pos_y, 
                                             src_radius_a,
@@ -43,7 +42,8 @@ class Pheromone {
                     float src_radius_a,
                     float src_chargeQa,
                     float src_momentPxUnitVector,
-                    float src_momentPyUnitVector) {
+                    float src_momentPyUnitVector) 
+  {
                       
     dipoles[numDipoles] = new Dipole( src_pos_x, 
                                       src_pos_y, 
@@ -56,11 +56,11 @@ class Pheromone {
 
 
 
-  void getForce( float observer_chargeQ,
-                 float observer_pos_x, 
-                 float observer_pos_y,
-                 float observer_vel_x,
-                 float observer_vel_y,
+  void getForce( float   observer_chargeQ,
+                 float   observer_pos_x, 
+                 float   observer_pos_y,
+                 float   observer_vel_x,
+                 float   observer_vel_y,
                  float[] force) 
   {
     force[0] = 0;
@@ -70,7 +70,7 @@ class Pheromone {
     
     for ( int p=0; p<numMonopoles; p++ ) {
       for ( int i=0; i<2; i++ ) {
-        monopoles[i].getForce( observer_chargeQ,
+        monopoles[p].getForce( observer_chargeQ,
                                observer_pos_x,
                                observer_pos_y,
                                observer_vel_x,
@@ -82,7 +82,7 @@ class Pheromone {
     
     for ( int p=0; p<numDipoles; p++ ) {
       for ( int i=0; i<2; i++ ) {
-        dipoles[i].getForce( observer_chargeQ,
+        dipoles[p].getForce( observer_chargeQ,
                              observer_pos_x,
                              observer_pos_y,
                              observer_vel_x,

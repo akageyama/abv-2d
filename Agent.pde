@@ -3,6 +3,8 @@ class Agent {
   float pos_x, pos_y;
   float vel_x, vel_y;  
   color col;    // color.
+  final float MASS = 0.01;
+  final float SPEED_LIMIT = 1;
 
   Agent( float xInit,  float yInit, 
          float vxInit, float vyInit, 
@@ -35,42 +37,25 @@ class Agent {
     float[] force = new float[2];
     
     for ( int i=0; i<2; i++ ) {
-      pheromone.getForceX( -1.0,
-                           pos_x,
-                           pos_y,
-                           vel_x,
-                           vel_y,
-                           force );
+      pheromone.getForce( -1.0,
+                          pos_x,
+                          pos_y,
+                          vel_x,
+                          vel_y,
+                          force );
     }
         
     pos_x += vel_x*dt;  // shift the ball position in x.
     pos_y += vel_y*dt;  // ... in y.
     
-    vel_x += force[0]*dt;
-    vel_y += force[1]*dt;
+    vel_x += force[0]/MASS*dt;
+    vel_y += force[1]/MASS*dt;
+    
+    float vel_amp = dist( 0, 0, vel_x, vel_y );   
+    if ( vel_amp >= SPEED_LIMIT ) {
+      vel_x = SPEED_LIMIT * vel_x / vel_amp;
+      vel_y = SPEED_LIMIT * vel_y / vel_amp;
+    }
   }
   
-
-  //void moveAlongFieldLine() {
-  //  float pgv_x, pgv_y;
-  //  float stride_x, stride_y;
-    
-  //  pgv_x = pheromone.getGradientVectorX( pos_x, pos_y );
-  //  pgv_y = pheromone.getGradientVectorY( pos_x, pos_y );
-
-  //  float amp_pgv = dist( 0, 0, pgv_x, pgv_y );
-  //  float stride_length = -1.e-1; // negative direction.
-    
-  //  if ( amp_pgv > 1.e-3 ) {    
-  //    stride_x = pgv_x / amp_pgv * stride_length;
-  //    stride_y = pgv_y / amp_pgv * stride_length;
-      
-  //  } else {
-  //    stride_x = 0;
-  //    stride_y = 0;
-  //  }
-    
-  //  pos_x += stride_x;
-  //  pos_y += stride_y;
-  //}  
 }

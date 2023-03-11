@@ -25,7 +25,6 @@ void draw() {
     for ( int repeat = 0; repeat< 20; repeat++ ) {
       for ( int i=0; i<NUM_AGENTS; i++ ) {
         agents[i].move( dt );
-        //agents[i].moveAlongFieldLine();
       }
     }
     simulationTime += dt;  
@@ -58,28 +57,27 @@ void setup() {
     agents[i] = new Agent( x0, y0, vx0, vy0, r, g, b ); 
   }  
   
-  float radiusA = width/60;
+  float radiusA = width/40;
+  float chargeQa = 1.e3;
   
   // place monopoles
-  pheromone.placeMonopole( width/2 - width/4, 
-                           height/2 - width/12,
-                           radiusA,
-                           1.e3 );
-  //pheromone.placeMonopole( width/2 + width/4, 
-  //                         height/2 + width/12,
-  //                         radiusA,
-  //                         1.e3 );
+  for ( int p=0; p<1; p++ ) {
+    float pos_x = random( width*0.1, width*0.5 );
+    float pos_y = random( height*0.1, height*0.9 );
+    pheromone.placeMonopole(pos_x, pos_y, radiusA, chargeQa );
+  }
+                           
   
-  //// place dipoles
-  //float momentPx = cos(PI/6);
-  //float momentPy = sin(PI/6);
-  //pheromone.placeDipole( width/2 + width/4, 
-  //                       height/2 + width/12,
-  //                       radiusA,
-  //                       1.e3, 
-  //                       momentPx,
-  //                       momentPy );
-  
+  // place dipoles
+  for ( int p=0; p<1; p++ ) {
+    float pos_x = random( width*0.6, width*0.9 );
+    float pos_y = random( height*0.1, height*0.9 );
+    float momentAngle = random( 0, TWO_PI );
+    float momentPx = cos(momentAngle);
+    float momentPy = sin(momentAngle);
+    pheromone.placeDipole( pos_x, pos_y, radiusA, chargeQa,
+                           momentPx, momentPy );
+    }
   }
 
 
