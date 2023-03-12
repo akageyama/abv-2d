@@ -1,3 +1,9 @@
+//
+// VisGuid class
+// 
+//   Visaulization Guid Field class.
+// 
+
 class VisGuide {
   
   final int MAX_NUM_MONOPOLES = 10;
@@ -16,11 +22,11 @@ class VisGuide {
 
   
   void show() {
-    for ( int i=0; i<numMonopoles; i++ ) {
-      monopoles[i].show();
+    for ( int p=0; p<numMonopoles; p++ ) {
+      monopoles[p].show();
     }
-    for ( int i=0; i<numDipoles; i++ ) {
-      dipoles[i].show();
+    for ( int p=0; p<numDipoles; p++ ) {
+      dipoles[p].show();
     }
   }
   
@@ -66,10 +72,10 @@ class VisGuide {
     force[0] = 0;
     force[1] = 0;
     
-    float[] work = new float[2];
+    float[] work = new float[2]; // 0 for x and 1 for y components
     
     for ( int p=0; p<numMonopoles; p++ ) {
-      for ( int i=0; i<2; i++ ) {
+      for ( int i=0; i<2; i++ ) { // x and y components
         monopoles[p].getForce( observer_chargeQ,
                                observer_pos_x,
                                observer_pos_y,

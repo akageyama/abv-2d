@@ -13,28 +13,29 @@ int NUM_AGENTS = 100;  // number of camera agents
 
 Agent[] agents = new Agent[NUM_AGENTS];
 
-VisGuide visGuide = new VisGuide();
+VisGuide visGuide = new VisGuide(); // Construct Visualization Guide Field.
 
 
 void draw() {
-  float dt = 0.1; // delta t (time increment).
+  float dt = 0.1; // delta t (time increment). 
+                  // This should be fixed by each simulation.
   
-  background( 150, 150, 200 );
+  background( 150, 150, 200 );  // Background color of the window.
 
-  if ( runningStateToggle ) {
-    for ( int repeat = 0; repeat< 20; repeat++ ) {
-      for ( int i=0; i<NUM_AGENTS; i++ ) {
-        agents[i].move( dt );
+  if ( runningStateToggle ) { // Agents move if ON. Switch by mouse click.
+    for ( int repeat = 0; repeat< 20; repeat++ ) { // To accelerate the computation
+      for ( int i=0; i<NUM_AGENTS; i++ ) {         // of agents' motion.
+        agents[i].move( dt );  // Move for one time step.
       }
     }
     simulationTime += dt;  
     println( " t = " + simulationTime );
   } 
   
-  visGuide.show();
+  visGuide.show();     // Draw monopole/dipole (colored circles).
   
   for ( int i=0; i<NUM_AGENTS; i++ ) {
-    agents[i].show();
+    agents[i].show();  // Draw agents (random color small circles).
   }  
  
 }

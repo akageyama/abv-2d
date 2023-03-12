@@ -1,21 +1,28 @@
+//
+// Dipole moment class
+// 
+//   Data and methods of a dipole moment that generates
+//   a dipole-type visualization guide (VisGuid) field .
+// 
+
 class Dipole {
-  float src_pos_x;
-  float src_pos_y;
-  float src_radiusA;
+  float src_pos_x;           // position of the dipole in the window coords.
+  float src_pos_y;         
+  float src_radiusA;         // The base radius "r_a" of the dipole. 
   float src_radiusB0;
   float src_radiusB1;
-  float src_chargeQa;
-  float src_radiusCutOff;
-  float src_momentPx;
-  float src_momentPy;
-  float src_momentPxUnitVec;
+  float src_chargeQa;        // Total charge in the sphere of radius r_a.  
+  float src_radiusCutOff;    // Distant (weak) dipole field is forced to be zero.
+  float src_momentPx;        // Dipole moment vector with x and y components.
+  float src_momentPy;      
+  float src_momentPxUnitVec; // Same as vector src_momentP but normalized to 1.
   float src_momentPyUnitVec;
   
   
-  float factor_0_a;
-  float factor_a_b0_1st;
-  float factor_a_b0_2nd;
-  float factor_b0_b1;
+  float factor_0_a;          // These factors will be used many times in the 
+  float factor_a_b0_1st;     // computaion of the visGuide field for every camera
+  float factor_a_b0_2nd;     // agent, for every time step. It's wise to calcuate 
+  float factor_b0_b1;        // these factors just once to save time.
   float factor_b1;
 
   Dipole( float pos_x,
@@ -34,6 +41,16 @@ class Dipole {
     src_radiusCutOff = radiusA*15;
     
     float p_amplitude = pow(2.0, 1.5) * chargeQa;
+      // This is not a rigorous relation.
+      // 
+      // A "dipole" is actually consists of the inner
+      // (double-layered) monopole and the outer dipole
+      // The strength of the inner dipole is controled by
+      // the parameter chargeQa, while the strength of the
+      // outer dipole is specified by the moment vector 
+      // (momentPx, momentPy). To realize a smooth passing
+      // of the agent camera between the interface of the
+      // inner and outer layers, we assume the this relationship.
     
     float momentVecAmp = dist( 0, 0, momentPx, momentPy );
     src_momentPxUnitVec = momentPx / momentVecAmp;
@@ -52,7 +69,7 @@ class Dipole {
   }
   
   
-  void getGradientVector( float   observer_pos_x,
+  void getVisGuideVector( float   observer_pos_x,
                           float   observer_pos_y,
                           float[] pgvec )
   {
@@ -96,29 +113,27 @@ class Dipole {
   {
     float relative_pos_x = observer_pos_x - src_pos_x;
     float relative_pos_y = observer_pos_y - src_pos_y;
-    float r_dot_v = relative_pos_x * observer_vel_x 
-                  + relative_pos_y * observer_vel_y;
+    //float r_dot_v = relative_pos_x * observer_vel_x 
+    //              + relative_pos_y * observer_vel_y;
 
     float r = dist( 0, 0, relative_pos_x, relative_pos_y );
-    float directive_friction_radius = src_radiusCutOff/2;
+    float directive_friction_radius = src_radiusCutOff/4;
     float BASE_FRICTION = 1.e-3;
     float friction_coeff;
     
-    friction_coeff = BASE_FRICTION;
+    friction_coeff = BASE_FRICTION;   // Basic air resistance for agent motion.
 
-    if ( r_dot_v < 0  && r <= directive_friction_radius ) {
+    //if ( r_dot_v < 0  && r <= directive_friction_radius ) {
+    if ( r <= directive_friction_radius ) {
+      // When an agent is close to the src position, it feels
+      // larger resistance. This additional resistance is 
+      // introduced to help the agent come along the direction 
+      // of the moment's vector (momentPx, momentPy).
       float nearness = ( directive_friction_radius - r ) 
-                       / directive_friction_radius;
+                       / directive_friction_radius;      
+      friction_coeff += 100 * BASE_FRICTION * nearness;
       
-      friction_coeff += BASE_FRICTION * pow( nearness/10, 2);
     }
-
-    //float vel_amp = dist( 0, 0, observer_vel_x, observer_vel_y );
-    //if ( vel_amp >= NON_LINEAR_FRICTION_CRITICAL_VEL ) {
-    //  float speed_over = vel_amp - NON_LINEAR_FRICTION_CRITICAL_VEL;
-    //  float speed_over_normed = speed_over / NON_LINEAR_FRICTION_CRITICAL_VEL;
-    //  friction_coeff += pow( speed_over_normed, 2 ) * BASE_FRICTION;
-    //}
     
     return friction_coeff;
   }
@@ -133,7 +148,7 @@ class Dipole {
   {
     float[] pgvec = new float[2];
     
-    getGradientVector( observer_pos_x,
+    getVisGuideVector( observer_pos_x,
                        observer_pos_y,
                        pgvec );
 
@@ -160,6 +175,7 @@ class Dipole {
     fill( 255, 255, 240 );
     ellipse( src_pos_x, src_pos_y, 2*src_radiusA, 2*src_radiusA );
 
+    // We draw a arrow-symbol to indicate the direction of the moment.
     float arrow_length = src_radiusB0;
     float arrow_vx = arrow_length*src_momentPxUnitVec;
     float arrow_vy = arrow_length*src_momentPyUnitVec;

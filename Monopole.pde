@@ -1,14 +1,26 @@
+//
+// Monopole moment class
+// 
+//   Data and methods of a dipole moment that generates
+//   a monopole-type visualization guide (VisGuid) field .
+// 
+
+
 class Monopole {
-  float src_pos_x;
+  float src_pos_x;           // position of the dipole in the window coords.
   float src_pos_y;
-  float src_radiusA;
+  float src_radiusA;         // The base radius "r_a" of the dipole. 
   float src_radiusB0;
   float src_radiusB1;
-  float src_chargeQa;
-  float src_a_cubed;  // a^3
-  float src_radiusCutOff;
+  float src_chargeQa;        // Total charge in the sphere of radius r_a.
+  float src_a_cubed;         // a^3
+  float src_radiusCutOff;    // Distant (weak) dipole field is forced to be zero.
   
   float factor_0_a, factor_a_b1, factor_b1;
+                             // These factors will be used many times in the 
+                             // computaion of the visGuide field for every camera
+                             // agent, for every time step. It's wise to calcuate 
+                             // these factors just once to save time.
 
   Monopole( float pos_x,
             float pos_y, 
@@ -32,7 +44,7 @@ class Monopole {
   }
   
   
-  void getGradientVector( float   observer_pos_x,
+  void getVisGuideVector( float   observer_pos_x,
                           float   observer_pos_y,
                           float[] pgvec )
   {
@@ -60,30 +72,37 @@ class Monopole {
   }  
   
   
-  float getFrictionCoeff( float observer_pos_x,
+
+float getFrictionCoeff( float observer_pos_x,
                           float observer_pos_y,
                           float observer_vel_x,
                           float observer_vel_y )
   {
     float relative_pos_x = observer_pos_x - src_pos_x;
     float relative_pos_y = observer_pos_y - src_pos_y;
-    float r_dot_v = relative_pos_x * observer_vel_x 
-                  + relative_pos_y * observer_vel_y;
+    //float r_dot_v = relative_pos_x * observer_vel_x 
+    //              + relative_pos_y * observer_vel_y;
 
-    float r = dist( 0, 0, relative_pos_x, relative_pos_y );                                          
-    float directive_friction_radius = src_radiusA*3;
+    float r = dist( 0, 0, relative_pos_x, relative_pos_y );
+    float directive_friction_radius = src_radiusCutOff/4;
     float BASE_FRICTION = 1.e-3;
     float friction_coeff;
     
-    if ( r_dot_v < 0  && r <= directive_friction_radius ) {
-      float nearness_to_src = directive_friction_radius - r;
-      friction_coeff = 10 * BASE_FRICTION * nearness_to_src + BASE_FRICTION;
-    } else { 
-      friction_coeff = BASE_FRICTION;
+    friction_coeff = BASE_FRICTION;   // Basic air resistance for agent motion.
+
+    //if ( r_dot_v < 0  && r <= directive_friction_radius ) {
+    if ( r <= directive_friction_radius ) {
+      // When an agent is close to the src position, it feels
+      // larger resistance. This additional resistance is 
+      // introduced to reduce the high speed "falling" of agent.
+      float nearness = ( directive_friction_radius - r ) 
+                       / directive_friction_radius;      
+      friction_coeff += 100 * BASE_FRICTION * nearness;
+      
     }
     
     return friction_coeff;
-  }
+  }  
   
   
   void getForce( float   observer_chargeQ,
@@ -95,7 +114,7 @@ class Monopole {
   {
     float[] pgvec = new float[2];
     
-    getGradientVector( observer_pos_x,
+    getVisGuideVector( observer_pos_x,
                        observer_pos_y,
                        pgvec );
 
