@@ -6,22 +6,27 @@
 
 class VisGuide {
   
-  final int MAX_NUM_MONOPOLES = 10;
+  int max_num_monopoles;
   int numMonopoles = 0 ;
   Monopole[] monopoles;
   
-  final int MAX_NUM_DIPOLES = 10;
+  int max_num_dipoles;
   int numDipoles = 0 ;
   Dipole[] dipoles;
   
 
-  VisGuide() {
-    monopoles = new Monopole[MAX_NUM_MONOPOLES];
-    dipoles   = new Dipole[MAX_NUM_DIPOLES];
+  VisGuide(int max_num_monopoles_, int max_num_dipoles_) 
+  {
+    max_num_monopoles = max_num_monopoles_;
+    monopoles = new Monopole[max_num_monopoles];
+
+    max_num_dipoles = max_num_dipoles_;
+    dipoles = new Dipole[max_num_dipoles];
   }
 
   
-  void show() {
+  void show() 
+  {
     for ( int p=0; p<numMonopoles; p++ ) {
       monopoles[p].show();
     }

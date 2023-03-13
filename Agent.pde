@@ -10,11 +10,13 @@ class Agent {
   color col;                   // RGB color of the agent.
   final float MASS = 0.01;     // Control of inertia (heviness) of the agent.
   final float SPEED_LIMIT = 1; // Agent cannot move faster than this speed.
-  float chargeQ = -1.0;        // Agent is negatively "charged". Monopole is positive.
+  float radius = 1.0;
+  float chargeQ = -1.e1;        // Agent is negatively "charged". Monopole is positive.
 
   Agent( float xInit,  float yInit, 
          float vxInit, float vyInit, 
-         int red, int green, int blue ) {
+         int red, int green, int blue ) 
+  {
     pos_x = xInit;
     pos_y = yInit;
     vel_x = vxInit;
@@ -22,22 +24,36 @@ class Agent {
     col = color( red, green, blue );
   }
 
-  void show() {
+  void show() 
+  {
     stroke( 0 );  // black for circle's boarder.
     fill( col );  // fill the circle with this color.
     ellipse( pos_x, pos_y, 10, 10 );  // circle of diameter 10 pixels.
   }
 
 
-  void move(float dt) 
+  void move(float dt, 
+            VisGuide visGuideByVOI, 
+            VisGuide visGuideByOtherAgents ) 
   {    
-    float[] force = new float[2];
+    float[] forceByVOI         = new float[2];
+    float[] forceByOtherAgents = new float[2];
+    float[] force              = new float[2];
+
     
     for ( int i=0; i<2; i++ ) { // 0 for force_x, 1 for force_y.
-      visGuide.getForce( chargeQ,
-                         pos_x, pos_y,
-                         vel_x, vel_y,
-                         force );
+      visGuideByVOI.getForce( chargeQ,
+                              pos_x, pos_y,
+                              vel_x, vel_y,
+                              forceByVOI );
+      visGuideByOtherAgents.getForce( chargeQ,
+                                      pos_x, pos_y,
+                                      vel_x, vel_y,
+                                      forceByOtherAgents );
+    }
+
+    for ( int i=0; i<2; i++ ) { // 0 for force_x, 1 for force_y.
+      force[i] = forceByVOI[i] + forceByOtherAgents[i];
     }
         
     pos_x += vel_x*dt;    // d(pos_x)/dt = vel_x
