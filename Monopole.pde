@@ -74,7 +74,7 @@ class Monopole {
   
 
 float getFrictionCoeff( float observer_pos_x,
-                        float observer_pos_y, )
+                        float observer_pos_y )
   {
     float relative_pos_x = observer_pos_x - src_pos_x;
     float relative_pos_y = observer_pos_y - src_pos_y;
@@ -114,9 +114,7 @@ float getFrictionCoeff( float observer_pos_x,
                        pgvec );
 
     float friction_coeff = getFrictionCoeff( observer_pos_x,
-                                             observer_pos_y,
-                                             observer_vel_x,
-                                             observer_vel_y );     
+                                             observer_pos_y );     
     force[0] = observer_chargeQ * pgvec[0] 
                - friction_coeff * observer_vel_x; 
     force[1] = observer_chargeQ * pgvec[1] 
@@ -127,8 +125,8 @@ float getFrictionCoeff( float observer_pos_x,
   void show() {
     stroke( 0 );
     fill( 230, 240, 256 );
-    circle( src_pos_x, src_pos_y, 2*src_radiusB1 );
+    ellipse( src_pos_x, src_pos_y, 2*src_radiusB1, 2*src_radiusB1 );
     fill( 255, 255, 240 );
-    circle( src_pos_x, src_pos_y, 2*src_radiusA );
+    ellipse( src_pos_x, src_pos_y, 2*src_radiusA, 2*src_radiusA );
   }
 }

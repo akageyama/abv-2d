@@ -12,7 +12,7 @@ float simulationTime = 0.0;
 final int MAX_NUM_MONOPOLES = 20;
 final int MAX_NUM_DIPOLES = 20;
 
-int NUM_AGENTS = 40;  // number of camera agents
+int NUM_AGENTS = 20;  // number of camera agents
 
 Agent[] agents = new Agent[NUM_AGENTS];
 
@@ -31,7 +31,7 @@ VisGuide calc_visGuideByOtherAgnets( int myAgentId )
     if ( i == myAgentId ) continue; // skip myself.
     answer.placeLinearpole( agents[i].pos_x,
                             agents[i].pos_y,
-                            agents[i].radius*20,
+                            agents[i].radius*10,
                             agents[i].chargeQ );
   }  
   return answer;
@@ -88,7 +88,7 @@ void setup() {
   float chargeQa = 1.e3;
   
   // place monopoles
-  for ( int p=0; p<3; p++ ) {
+  for ( int p=0; p<1; p++ ) {
     float pos_x = random( width*0.1, width*0.5 );
     float pos_y = random( height*0.1, height*0.9 );
     visGuideByVOI.placeMonopole(pos_x, pos_y, radiusA, chargeQa );
@@ -96,7 +96,7 @@ void setup() {
                            
   
   // place dipoles
-  for ( int p=0; p<3; p++ ) {
+  for ( int p=0; p<1; p++ ) {
     float pos_x = random( width*0.6, width*0.9 );
     float pos_y = random( height*0.1, height*0.9 );
     float momentAngle = random( 0, TWO_PI );
