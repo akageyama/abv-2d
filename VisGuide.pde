@@ -14,14 +14,23 @@ class VisGuide {
   int numDipoles = 0 ;
   Dipole[] dipoles;
   
+  int max_num_linearpoles;
+  int numLinearpoles = 0;
+  Linearpole[] linearpoles;
+  
 
-  VisGuide(int max_num_monopoles_, int max_num_dipoles_) 
+  VisGuide( int max_num_monopoles_, 
+            int max_num_dipoles_,
+            int max_num_linearpoles_ ) 
   {
     max_num_monopoles = max_num_monopoles_;
     monopoles = new Monopole[max_num_monopoles];
 
     max_num_dipoles = max_num_dipoles_;
     dipoles = new Dipole[max_num_dipoles];
+    
+    max_num_linearpoles = max_num_linearpoles_;
+    linearpoles = new Linearpole[max_num_linearpoles];
   }
 
   
@@ -32,6 +41,9 @@ class VisGuide {
     }
     for ( int p=0; p<numDipoles; p++ ) {
       dipoles[p].show();
+    }
+    for ( int p=0; p<numLinearpoles; p++ ) {
+      linearpoles[p].show();
     }
   }
   
@@ -64,7 +76,20 @@ class VisGuide {
                                       src_momentPyUnitVector );
     numDipoles += 1;
   }
-
+  
+  
+  void placeLinearpole( float src_pos_x, 
+                        float src_pos_y,
+                        float src_radius,
+                        float src_chargeQ ) 
+  {
+    linearpoles[numLinearpoles] = new Linearpole( src_pos_x, 
+                                                  src_pos_y, 
+                                                  src_radius,
+                                                  src_chargeQ );
+    numLinearpoles += 1;
+  }
+  
 
 
   void getForce( float   observer_chargeQ,
@@ -102,6 +127,18 @@ class VisGuide {
         force[i] += work[i];
       }
     }
+    
+    for ( int p=0; p<numLinearpoles; p++ ) {
+      for ( int i=0; i<2; i++ ) {
+        linearpoles[p].getForce( observer_chargeQ,
+                                 observer_pos_x,
+                                 observer_pos_y,
+                                 observer_vel_x,
+                                 observer_vel_y,
+                                 work );
+        force[i] += work[i];
+      }
+    }    
   }
 
 }

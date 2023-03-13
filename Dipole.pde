@@ -107,23 +107,18 @@ class Dipole {
   
   
   float getFrictionCoeff( float observer_pos_x,
-                          float observer_pos_y,
-                          float observer_vel_x,
-                          float observer_vel_y )
+                          float observer_pos_y )
   {
     float relative_pos_x = observer_pos_x - src_pos_x;
     float relative_pos_y = observer_pos_y - src_pos_y;
-    //float r_dot_v = relative_pos_x * observer_vel_x 
-    //              + relative_pos_y * observer_vel_y;
 
     float r = dist( 0, 0, relative_pos_x, relative_pos_y );
     float directive_friction_radius = src_radiusCutOff/4;
     float BASE_FRICTION = 1.e-3;
     float friction_coeff;
     
-    friction_coeff = BASE_FRICTION;   // Basic air resistance for agent motion.
+    friction_coeff = 0;   // Basic air resistance for agent motion.
 
-    //if ( r_dot_v < 0  && r <= directive_friction_radius ) {
     if ( r <= directive_friction_radius ) {
       // When an agent is close to the src position, it feels
       // larger resistance. This additional resistance is 
@@ -131,8 +126,7 @@ class Dipole {
       // of the moment's vector (momentPx, momentPy).
       float nearness = ( directive_friction_radius - r ) 
                        / directive_friction_radius;      
-      friction_coeff += 100 * BASE_FRICTION * nearness;
-      
+      friction_coeff = 100 * BASE_FRICTION * nearness;
     }
     
     return friction_coeff;

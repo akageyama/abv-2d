@@ -17,21 +17,22 @@ int NUM_AGENTS = 40;  // number of camera agents
 Agent[] agents = new Agent[NUM_AGENTS];
 
 VisGuide visGuideByVOI = new VisGuide( MAX_NUM_MONOPOLES, 
-                                       MAX_NUM_DIPOLES ); 
+                                       MAX_NUM_DIPOLES,
+                                       0 ); 
 
-VisGuide visGuideByOtherAgents = new VisGuide( NUM_AGENTS-1, 0 );
+VisGuide visGuideByOtherAgents = new VisGuide( 0, 0, NUM_AGENTS-1  );
 
 
 VisGuide calc_visGuideByOtherAgnets( int myAgentId ) 
 {
-  VisGuide answer = new VisGuide( NUM_AGENTS-1, 0 );
+  VisGuide answer = new VisGuide( 0, 0, NUM_AGENTS-1 );
   
   for ( int i=0; i<NUM_AGENTS; i++ ) {
     if ( i == myAgentId ) continue; // skip myself.
-    answer.placeMonopole( agents[i].pos_x,
-                          agents[i].pos_y,
-                          agents[i].radius,
-                          agents[i].chargeQ );
+    answer.placeLinearpole( agents[i].pos_x,
+                            agents[i].pos_y,
+                            agents[i].radius*20,
+                            agents[i].chargeQ );
   }  
   return answer;
 }
