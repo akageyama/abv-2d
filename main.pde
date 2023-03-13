@@ -88,7 +88,7 @@ void setup() {
   float chargeQa = 1.e3;
   
   // place monopoles
-  for ( int p=0; p<1; p++ ) {
+  for ( int p=0; p<3; p++ ) {
     float pos_x = random( width*0.1, width*0.5 );
     float pos_y = random( height*0.1, height*0.9 );
     visGuideByVOI.placeMonopole(pos_x, pos_y, radiusA, chargeQa );
@@ -96,7 +96,7 @@ void setup() {
                            
   
   // place dipoles
-  for ( int p=0; p<1; p++ ) {
+  for ( int p=0; p<3; p++ ) {
     float pos_x = random( width*0.6, width*0.9 );
     float pos_y = random( height*0.1, height*0.9 );
     float momentAngle = random( 0, TWO_PI );

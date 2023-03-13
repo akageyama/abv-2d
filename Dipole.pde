@@ -147,9 +147,7 @@ class Dipole {
                        pgvec );
 
     float friction_coeff = getFrictionCoeff( observer_pos_x,
-                                             observer_pos_y,
-                                             observer_vel_x,
-                                             observer_vel_y );                         
+                                             observer_pos_y );                         
     
     force[0] = observer_chargeQ * pgvec[0] 
                - friction_coeff * observer_vel_x; 
